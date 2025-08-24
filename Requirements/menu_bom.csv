@@ -1,0 +1,58 @@
+menu_item,ingredient,qty,unit,context
+Pinsa Pazza,00_flour,0.6417,kg,pinsa
+Pinsa Pazza,tomato_sauce,0.3348,kg,pinsa
+Pinsa Pazza,mozzarella_fior_di_latte,0.3348,kg,pinsa
+Pinsa Pazza,pesto,0.0558,kg,pinsa
+Pinsa Pazza,burrata,0.1116,kg,pinsa
+Pinsa Primavera,00_flour,0.6287,kg,pinsa
+Pinsa Primavera,roasted_tomato,0.328,kg,pinsa
+Pinsa Primavera,prosciutto_crudo,0.164,kg,pinsa
+Pinsa Primavera,arugula,0.1093,kg,pinsa
+Pinsa Primavera,parmesan,0.0547,kg,pinsa
+Pinsa Maleducata,00_flour,0.5709,kg,pinsa
+Pinsa Maleducata,tomato_sauce,0.2979,kg,pinsa
+Pinsa Maleducata,fontina,0.2979,kg,pinsa
+Pinsa Maleducata,pancetta,0.1489,kg,pinsa
+Pinsa Maleducata,onion_jam,0.0745,kg,pinsa
+Pinsa Maiala,00_flour,0.4758,kg,pinsa
+Pinsa Maiala,tomato_sauce,0.2482,kg,pinsa
+Pinsa Maiala,mozzarella_fior_di_latte,0.2069,kg,pinsa
+Pinsa Maiala,salami,0.1034,kg,pinsa
+Pinsa Maiala,sausage,0.1034,kg,pinsa
+Pinsa Maiala,porchetta,0.1034,kg,pinsa
+Pinsa Funghi,00_flour,0.6402,kg,pinsa
+Pinsa Funghi,mushroom_mix,0.2505,kg,pinsa
+Pinsa Funghi,truffle_oil,0.0278,l,pinsa
+Pinsa Funghi,fontina,0.2784,kg,pinsa
+Pinsa Funghi,parmesan,0.0835,kg,pinsa
+Lasagna,tagliatelle,0.5132,kg,pasta
+Lasagna,ragu_meat_sauce,0.3992,kg,pasta
+Lasagna,cream,0.114,l,pasta
+Lasagna,parmesan,0.057,kg,pasta
+Campanelle Pazze,campanelle,0.7448,kg,pasta
+Campanelle Pazze,roasted_tomato,0.4966,kg,pasta
+Campanelle Pazze,garlic,0.0414,kg,pasta
+Campanelle Pazze,kalamata_olives,0.1241,kg,pasta
+Campanelle Pazze,olive_oil,0.0414,l,pasta
+Amatriciana,tagliatelle,0.6523,kg,pasta
+Amatriciana,tomato_sauce,0.4349,kg,pasta
+Amatriciana,pancetta,0.1812,kg,pasta
+Amatriciana,garlic,0.0362,kg,pasta
+Ragu & Funghi,conchiglie,0.5434,kg,pasta
+Ragu & Funghi,ragu_meat_sauce,0.3623,kg,pasta
+Ragu & Funghi,mushroom_mix,0.151,kg,pasta
+Ragu & Funghi,cream,0.0906,l,pasta
+Carbonara Pazza,tagliatelle,0.6598,kg,pasta
+Carbonara Pazza,egg_yolk,0.1833,kg,pasta
+Carbonara Pazza,pancetta,0.1833,kg,pasta
+Carbonara Pazza,parmesan,0.0733,kg,pasta
+Arugula Salad,arugula,0.2043,kg,salad
+Arugula Salad,roasted_tomato,0.1277,kg,salad
+Arugula Salad,gorgonzola,0.0511,kg,salad
+Arugula Salad,sun_dried_tomato,0.0511,kg,salad
+Arugula Salad,olive_oil,0.0255,l,salad
+Arugula Salad,lemon,0.0255,kg,salad
+Beet Spinach Salad,goat_cheese_crumbles,0.0963,kg,salad
+Beet Spinach Salad,walnut,0.0963,kg,salad
+Beet Spinach Salad,strawberry,0.1926,kg,salad
+Beet Spinach Salad,olive_oil,0.0482,l,salad

@@ -1,0 +1,19 @@
+ingredient,substitute,context,allowed,rationale
+roasted_tomato,tomato_sauce,pasta,True,Comparable acidity and body in sauces
+roasted_tomato,tomato_sauce,pinsa,False,Watery on crust; bake-out issues
+tomato_sauce,roasted_tomato,pinsa,False,Texture/water risk on pinsa
+mozzarella_fior_di_latte,fontina,pinsa,True,Similar melt; saltier profile
+mozzarella_fior_di_latte,burrata,pinsa,False,Different moisture/application
+fontina,mozzarella_fior_di_latte,pinsa,True,Reverse swap acceptable
+pancetta,sausage,pasta,True,Maintain savory/fat; texture changes
+pancetta,sausage,pinsa,True,Acceptable on meat-forward pinsa
+pancetta,porchetta,pasta,True,Comparable pork; slice/texture differs
+mushroom_mix,cremini,pasta,True,Milder flavor; keep volume
+mushroom_mix,cremini,pinsa,True,Acceptable earthiness on cheese base
+arugula,spinach,salad,True,Similar texture; flavor shifts
+gorgonzola,goat_cheese,salad,True,Flavor changes; maintain creaminess
+parmesan,gorgonzola,pasta,False,Too strong for finishing role
+00_flour,ap_flour,pinsa,False,Crumb/fermentation not equivalent
+kalamata_olives,black_olives,pasta,True,Brininess preserved
+egg_yolk,cream,pasta,True,Texture substitute; flavor differs
+olive_oil,neutral_oil,salad,True,Dressing body preserved; flavor loss
