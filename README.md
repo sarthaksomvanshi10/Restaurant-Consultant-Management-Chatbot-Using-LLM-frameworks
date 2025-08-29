@@ -76,7 +76,6 @@ flowchart LR
    style E4 fill:#ffffff,stroke:#000000
 ```
 
-
 ### Architecture diagram ###
 
 ![image](Architecture/ARCH.drawio.png)
