@@ -1,0 +1,282 @@
+{
+  "name": "Restaurant Chatbot with Streamlit",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "chat",
+        "httpMethod": "POST",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract and validate incoming data\nconst body = $json.body || {};\nconst message = body.message;\nconst sessionId = body.session_id || null;\n\n// Validate required fields\nif (!message || message.trim() === '') {\n  return [{\n    error: 'Message is required',\n    success: false\n  }];\n}\n\n// Prepare data for FastAPI\nconst chatData = {\n  message: message.trim(),\n  session_id: sessionId\n};\n\nconsole.log('Processing chat request from Streamlit:', chatData);\n\nreturn [{\n  chatData: chatData,\n  originalBody: body,\n  isValid: true\n}];"
+      },
+      "id": "validate-input",
+      "name": "Validate Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "id": "validation-check",
+              "value1": "={{ $json.isValid }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-validation",
+      "name": "Check Validation",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/chat",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.chatData }}",
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "call-backend",
+      "name": "Call FastAPI Backend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 250]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format successful response for Streamlit\nconst response = $json;\n\n// Extract key information\nconst chatResponse = response.response || 'Sorry, I encountered an error.';\nconst sessionId = response.session_id;\nconst analysisData = response.analysis_data || {};\n\n// Format response specifically for Streamlit consumption\nconst formattedResponse = {\n  success: true,\n  response: chatResponse,\n  session_id: sessionId,\n  analysis_data: analysisData,\n  timestamp: new Date().toISOString(),\n  source: 'n8n-backend'\n};\n\n// Add summary for quick reference\nif (analysisData && typeof analysisData === 'object') {\n  formattedResponse.has_analysis = true;\n  formattedResponse.summary = {\n    items_analyzed: analysisData.summary?.total_items_analyzed || 0,\n    items_impacted: analysisData.summary?.items_impacted || 0,\n    substitutions_available: analysisData.summary?.substitutions_available || 0\n  };\n} else {\n  formattedResponse.has_analysis = false;\n}\n\nconsole.log('Sending response to Streamlit:', {\n  success: formattedResponse.success,\n  response_length: chatResponse.length,\n  has_analysis: formattedResponse.has_analysis,\n  session_id: sessionId\n});\n\nreturn [formattedResponse];"
+      },
+      "id": "format-success",
+      "name": "Format Success Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 250]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Handle validation error\nconst error = $json.error || 'Invalid input';\n\nconst errorResponse = {\n  success: false,\n  error: error,\n  message: 'Please provide a valid message about ingredient price changes or supply delays.',\n  timestamp: new Date().toISOString(),\n  source: 'n8n-validation'\n};\n\nconsole.log('Validation error for Streamlit:', errorResponse);\n\nreturn [errorResponse];"
+      },
+      "id": "format-error",
+      "name": "Format Error Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 350]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Handle FastAPI backend error\nconst error = $json.error || 'Backend service error';\nconst statusCode = $json.statusCode || 500;\n\nlet errorMessage = 'Backend service error';\nif (statusCode === 404) {\n  errorMessage = 'Backend service not found';\n} else if (statusCode === 422) {\n  errorMessage = 'Invalid request format';\n} else if (statusCode >= 500) {\n  errorMessage = 'Internal backend error';\n} else {\n  errorMessage = error;\n}\n\nconst errorResponse = {\n  json: {\n    success: false,\n    error: errorMessage,\n    details: typeof error === 'string' ? error : JSON.stringify(error),\n    timestamp: new Date().toISOString(),\n    source: 'n8n-backend-error'\n  }\n};\n\nconsole.log('Backend error for Streamlit:', errorResponse);\n\nreturn [errorResponse];"
+      },
+      "id": "handle-api-error",
+      "name": "Handle API Error",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 350]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "responseHeaders": {
+          "entries": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        }
+      },
+      "id": "respond-success",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1300, 250]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 400
+        },
+        "responseHeaders": {
+          "entries": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Access-Control-Allow-Origin", 
+              "value": "*"
+            }
+          ]
+        }
+      },
+      "id": "respond-error",
+      "name": "Respond Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1300, 350]
+    },
+    {
+      "parameters": {
+        "cron": "0 */6 * * *",
+        "triggerAtStartup": false
+      },
+      "id": "schedule",
+      "name": "Every 6 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [300, 500]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "scenario1",
+              "name": "scenario1",
+              "value": {
+                "message": "Tomatoes increased by 22%, how does this affect us?",
+                "session_id": null
+              },
+              "type": "object"
+            },
+            {
+              "id": "scenario2", 
+              "name": "scenario2",
+              "value": {
+                "message": "Flour shipment delayed by 6 days",
+                "session_id": null
+              },
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "test-scenarios",
+      "name": "Test Scenarios",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [500, 500]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/chat",
+        "sendBody": true,
+        "specifyBody": "json", 
+        "jsonBody": "={{ $json.scenario1 }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "test-call-1",
+      "name": "Test Call 1",
+      "type": "n8n-nodes-base.httpRequest", 
+      "typeVersion": 4.2,
+      "position": [700, 450]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/chat",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.scenario2 }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "test-call-2", 
+      "name": "Test Call 2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [700, 550]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log test results\nconst results = {\n  scenario1: $('Test Call 1').first(),\n  scenario2: $('Test Call 2').first(),\n  timestamp: new Date().toISOString()\n};\n\nconsole.log('=== AUTOMATED TEST RESULTS ===');\nconsole.log('Scenario 1 (Tomato Price Shock):', results.scenario1?.json?.response || 'Failed');\nconsole.log('Scenario 2 (Flour Delay):', results.scenario2?.json?.response || 'Failed');\nconsole.log('===============================');\n\nreturn [results];"
+      },
+      "id": "log-test-results",
+      "name": "Log Test Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 500]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [[{"node": "Validate Input", "type": "main", "index": 0}]]
+    },
+    "Validate Input": {
+      "main": [[{"node": "Check Validation", "type": "main", "index": 0}]]
+    },
+    "Check Validation": {
+      "main": [
+        [{"node": "Call FastAPI Backend", "type": "main", "index": 0}],
+        [{"node": "Format Error Response", "type": "main", "index": 0}]
+      ]
+    },
+    "Call FastAPI Backend": {
+      "main": [[{"node": "Format Success Response", "type": "main", "index": 0}]],
+      "error": [[{"node": "Handle API Error", "type": "main", "index": 0}]]
+    },
+    "Format Success Response": {
+      "main": [[{"node": "Respond Success", "type": "main", "index": 0}]]
+    },
+    "Format Error Response": {
+      "main": [[{"node": "Respond Error", "type": "main", "index": 0}]]
+    },
+    "Handle API Error": {
+      "main": [[{"node": "Respond Error", "type": "main", "index": 0}]]
+    },
+    "Every 6 Hours": {
+      "main": [[{"node": "Test Scenarios", "type": "main", "index": 0}]]
+    },
+    "Test Scenarios": {
+      "main": [[
+        {"node": "Test Call 1", "type": "main", "index": 0},
+        {"node": "Test Call 2", "type": "main", "index": 0}
+      ]]
+    },
+    "Test Call 1": {
+      "main": [[{"node": "Log Test Results", "type": "main", "index": 0}]]
+    },
+    "Test Call 2": {
+      "main": [[{"node": "Log Test Results", "type": "main", "index": 0}]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "id": "restaurant-chatbot-streamlit",
+  "tags": []
+}
