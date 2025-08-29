@@ -74,6 +74,7 @@ flowchart LR
    style C4 fill:#ffffff,stroke:#000000
    style D4 fill:#ffffff,stroke:#000000
    style E4 fill:#ffffff,stroke:#000000
+```
 
 
 ### Architecture diagram ###
@@ -161,15 +162,6 @@ Since you have `docker-compose.yml` configured, you can start all services at on
 docker-compose up --build
 ```
 
-### Access Applications
-- Streamlit: [http://localhost:8501](http://localhost:8501)  
-- FastAPI: [http://localhost:8000](http://localhost:8000)  
-- N8N: [http://localhost:5678](http://localhost:5678)  
-
-```bash
-# Stop services
-docker-compose down
-```
 
 
 ### Access Applications
