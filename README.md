@@ -75,9 +75,10 @@ flowchart LR
    style D4 fill:#ffffff,stroke:#000000
    style E4 fill:#ffffff,stroke:#000000
 
-   ### Architecture diagram ###
 
-![image](Architecture/images/ARCH.drawio.png)
+### Architecture diagram ###
+
+![image](Architecture/ARCH.drawio.png)
 
 # Local LLM Chatbot Setup (Ollama + FastAPI + Streamlit + N8N)
 
@@ -85,10 +86,50 @@ This guide walks you through installing and configuring all components required 
 
 ---
 
-## 1. Install Ollama (Linux/Mac)
+# Setup Instructions
+
+## Prerequisites
+- Docker and Docker Compose installed
+- Python 3.9 or higher
+- Git for version control
+
+---
+
+## 1. Clone the Repository
+```bash
+git clone https://github.com/your-repo/Restaurant-Consultant-Management-Chatbot-Using-LLM-frameworks.git
+cd Restaurant-Consultant-Management-Chatbot-Using-LLM-frameworks
+```
+
+---
+
+## 2. Environment Configuration
+```bash
+cd backend
+cp .env.example .env
+```
+
+Update your `.env` file with the following configurations:
 
 ```bash
-# Install Ollama
+# Ollama Configuration
+OLLAMA_URL=http://localhost:11434
+OLLAMA_MODEL=llama3.2:1b
+
+# N8N Configuration  
+N8N_WEBHOOK_URL=http://localhost:8000/chat
+
+# Data Configuration
+DATA_PATH=/app/data
+```
+
+---
+
+## 3. Ollama Setup
+Install and configure Ollama for local LLM processing:
+
+```bash
+# Install Ollama (Linux/Mac)
 curl -fsSL https://ollama.ai/install.sh | sh
 
 # Start Ollama service
@@ -100,8 +141,7 @@ ollama pull llama3.2:1b
 
 ---
 
-## 2. N8N Workflow Setup
-
+## 4. N8N Workflow Setup
 ```bash
 # Start N8N container
 docker run -it --rm --name n8n -p 5678:5678 n8nio/n8n
@@ -113,48 +153,24 @@ docker run -it --rm --name n8n -p 5678:5678 n8nio/n8n
 
 ---
 
-## 3. FastAPI Backend Setup
-
-```bash
-# Navigate to backend directory
-cd backend
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Start FastAPI server
-python main.py
-```
-
-The FastAPI server will be available at: [http://localhost:8000](http://localhost:8000)
-
----
-
-## 4. Streamlit Frontend Setup
-
-```bash
-# Navigate to frontend directory  
-cd frontend
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Start Streamlit application
-streamlit run streamlit_app.py
-```
-
-The Streamlit app will be available at: [http://localhost:8501](http://localhost:8501)
-
----
-
-## 5. Docker Compose (Alternative Setup)
-
-For a complete containerized setup:
+## 5. Start All Services with Docker Compose
+Since you have `docker-compose.yml` configured, you can start all services at once:
 
 ```bash
 # Build and start all services
 docker-compose up --build
 ```
+
+### Access Applications
+- Streamlit: [http://localhost:8501](http://localhost:8501)  
+- FastAPI: [http://localhost:8000](http://localhost:8000)  
+- N8N: [http://localhost:5678](http://localhost:5678)  
+
+```bash
+# Stop services
+docker-compose down
+```
+
 
 ### Access Applications
 - Streamlit: [http://localhost:8501](http://localhost:8501)  
