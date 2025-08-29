@@ -222,7 +222,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Log test results\nconst results = {\n  scenario1: $('Test Call 1').first(),\n  scenario2: $('Test Call 2').first(),\n  timestamp: new Date().toISOString()\n};\n\nconsole.log('=== AUTOMATED TEST RESULTS ===');\nconsole.log('Scenario 1 (Tomato Price Shock):', results.scenario1?.json?.response || 'Failed');\nconsole.log('Scenario 2 (Flour Delay):', results.scenario2?.json?.response || 'Failed');\nconsole.log('===============================');\n\nreturn [results];"
+        "jsCode": "// Log test results\nconst results = {\n  scenario1: $input.first(),\n  scenario2: $input.last(),\n  timestamp: new Date().toISOString()\n};\n\nconsole.log('=== AUTOMATED TEST RESULTS ===');\nconsole.log('Scenario 1 (Tomato Price Shock):', results.scenario1?.json?.response || 'Failed');\nconsole.log('Scenario 2 (Flour Delay):', results.scenario2?.json?.response || 'Failed');\nconsole.log('===============================');\n\nreturn [results];"
       },
       "id": "log-test-results",
       "name": "Log Test Results",
@@ -279,4 +279,4 @@
   },
   "id": "restaurant-chatbot-streamlit",
   "tags": []
-}
+ }
